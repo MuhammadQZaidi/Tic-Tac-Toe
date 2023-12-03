@@ -27,12 +27,12 @@ void tic_tac_toe::computer()
     srand(x);
     int square = 1 + rand() % 9;
 
-    while(isalpha(tick[square]))
+    while(isalpha(tick[square-1]))
     {
         square = 1 + rand() % 9;
     }
 
-    tick[square] = 'O';
+    tick[square-1] = 'Y';
     
 }
 

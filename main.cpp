@@ -17,9 +17,12 @@ int main()
     game.computer();
     game.display_board(); 
     game.computer();
-    game.display_board(); 
+    game.display_board();
     game.computer();
-    game.display_board(); 
+    game.display_board();
+    game.computer();
+    game.display_board();
+    
 
     
     
