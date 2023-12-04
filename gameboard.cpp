@@ -7,18 +7,38 @@
 
 void tic_tac_toe::display_board()
 {
-    std::cout << tick[0] << " | " << tick[1] << " | " << tick[2] << std::endl;
+    std::cout << board[0] << " | " << board[1] << " | " << board[2] << std::endl;
     std::cout << "--|---|--" << std::endl;
-    std::cout << tick[3] << " | " << tick[4] << " | " << tick[5] << std::endl;
+    std::cout << board[3] << " | " << board[4] << " | " << board[5] << std::endl;
     std::cout << "--|---|--" << std::endl;
-    std::cout << tick[6] << " | " << tick[7] << " | " << tick[8] << std::endl;
+    std::cout << board[6] << " | " << board[7] << " | " << board[8] << std::endl;
 
     std::cout << std::endl;
 }
 
-void tic_tac_toe::user_input(int mark)
+void tic_tac_toe::user_input()
 {
-    tick[mark] = 'X';
+    int mark;
+    std::cout << "Your Move: ";
+    std::cin >> mark;
+
+    while(std::cin.fail() || mark < 1 || mark > 9)
+    {
+        std::cin.clear();
+        std::cin.ignore(80, '\n');
+        std::cout << "invalid input. Please input the number of the quadrant you would like to mark: ";
+        std::cin >> mark;
+    }
+
+    while(isalpha(board[mark-1]))
+    {
+        std::cin.clear();
+        std::cin.ignore(80, '\n');
+        std::cout << "This space is already taken. Please input a different quadrant: ";
+        std::cin >> mark;
+    }
+
+    board[mark-1] = 'X';
 }
 
 void tic_tac_toe::computer()
@@ -27,28 +47,67 @@ void tic_tac_toe::computer()
     srand(x);
     int square = 1 + rand() % 9;
 
-    while(isalpha(tick[square-1]))
+    while(isalpha(board[square-1]))
     {
         square = 1 + rand() % 9;
     }
 
-    tick[square-1] = 'Y';
+    board[square-1] = 'O';
     
 }
 
-bool tic_tac_toe::match_fin_check()
+int tic_tac_toe::winner_check()
 {
-    bool completion = false;
-
-    for(int i = 0; i < 9; i++)
+    int winner = 3;
+    
+    if((board[0] == 'X' && board[1] == 'X' && board[2] == 'X') || (board[0] == 'X' && board[3] == 'X' && board[6] == 'X') || (board[0] == 'X' && board[4] == 'X' && board[8] == 'X') ||
+       (board[3] == 'X' && board[4] == 'X' && board[5] == 'X') || (board[1] == 'X' && board[4] == 'X' && board[7] == 'X') || (board[2] == 'X' && board[4] == 'X' && board[6] == 'X') ||
+       (board[6] == 'X' && board[7] == 'X' && board[8] == 'X') || (board[2] == 'X' && board[5] == 'X' && board[8] == 'X') 
+       )
     {
-        int square_check = 0;
-
-        if(isalpha(tick[i]))
-        {
-            square_check++;
-        }
+        winner = 1;
     }
 
-    return completion;
+    if((board[0] == 'O' && board[1] == 'O' && board[2] == 'O') || (board[0] == 'O' && board[3] == 'O' && board[6] == 'O') || (board[0] == 'O' && board[4] == 'O' && board[8] == 'O') ||
+       (board[3] == 'O' && board[4] == 'O' && board[5] == 'O') || (board[1] == 'O' && board[4] == 'O' && board[7] == 'O') || (board[2] == 'O' && board[4] == 'O' && board[6] == 'O') ||
+       (board[6] == 'O' && board[7] == 'O' && board[8] == 'O') || (board[2] == 'O' && board[5] == 'O' && board[8] == 'O') 
+       )
+    {
+        winner = -1;
+    }
+
+    return winner;
+}
+
+void tic_tac_toe::record_score(int winner)
+{
+    if(winner == 1)
+    {
+        user_wins++;
+    }
+
+    else if(winner == -1)
+    {
+        computer_wins++;
+    }
+}   
+
+void tic_tac_toe::display_score(int matches)
+{
+    std::cout << std::endl;
+    std::cout << "You won " << user_wins << " out of " << matches << " matches" << std::endl;
+    std::cout << "The computer won " << computer_wins << " out of " << matches << " matches" << std::endl;
+    std::cout << "There were " << matches - (user_wins + computer_wins) << " ties" << std::endl;
+    std::cout << "Thank you for playing!" << std::endl;
+    std::cout << std::endl;
+
+}
+
+void tic_tac_toe::reset_board()
+{
+    for(int i = 0; i < 9; i++)
+    {
+        board[i] = '1' + i;
+    }
+
 }
